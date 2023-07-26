@@ -3,7 +3,7 @@ const express=require('express');
 const app=express();
 const cors=require('cors');
 const port=process.env.PORT || 5000;
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 
 app.use(cors());
 
@@ -52,6 +52,18 @@ async function run() {
      
       res.send(result);
 
+    })
+    app.get('/mytasks',async(req,res)=>{
+      const email=req.query.email;
+      const query={assignee:email};
+      const result=await taskCollection.find(query).toArray();
+      res.send(result);
+    })
+    app.get('/taskdetails/:id',async(req,res)=>{
+      const id=req.params.id;
+      const filter={_id:new ObjectId(id)};
+      const result=await taskCollection.find(filter).toArray();
+      res.send(result);
     })
 
     
