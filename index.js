@@ -25,6 +25,7 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     const usersCollection = client.db("task_management").collection("usersCollection")
+    const taskCollection=client.db("task_management").collection("tasks")
     app.post('/adduser',async(req,res)=>{
       const user=req.body;
       const result=await usersCollection.insertOne(user);
@@ -41,16 +42,18 @@ async function run() {
       const result=await usersCollection.find().toArray();
       res.send(result);
     })
-    app.patch('/addtask',async(req,res)=>{
-      const email=req.query.email;
-      const query={email:email};
-      console.log(query);
-      const {task_name,task_desc,due_date}=req.body;
-      const updateDoc={$set:{taskName:task_name,taskDesc:task_desc,dueDate:due_date}};
-      const result=await usersCollection.updateOne(query,updateDoc)
+    app.post('/addtask',async(req,res)=>{
+      const task=req.body;
+      const result=await taskCollection.insertOne(task);
       res.send(result);
     })
-    
+    app.get('/alltasks',async(req,res)=>{
+      const result=await taskCollection.find().toArray();
+     
+      res.send(result);
+
+    })
+
     
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
   } finally {
