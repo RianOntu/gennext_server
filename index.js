@@ -37,6 +37,20 @@ async function run() {
       const result=await usersCollection.find(query).toArray()
       res.send(result)
     })
+    app.get('/allusers',async(req,res)=>{
+      const result=await usersCollection.find().toArray();
+      res.send(result);
+    })
+    app.patch('/addtask',async(req,res)=>{
+      const email=req.query.email;
+      const query={email:email};
+      console.log(query);
+      const {task_name,task_desc,due_date}=req.body;
+      const updateDoc={$set:{taskName:task_name,taskDesc:task_desc,dueDate:due_date}};
+      const result=await usersCollection.updateOne(query,updateDoc)
+      res.send(result);
+    })
+    
     
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
   } finally {
