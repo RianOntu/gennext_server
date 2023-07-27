@@ -65,6 +65,15 @@ async function run() {
       const result=await taskCollection.find(filter).toArray();
       res.send(result);
     })
+    app.patch('/updatestatus/:id',async(req,res)=>{
+      const id=req.params.id;
+      console.log(id,req.body);
+      const {status}=req.body;
+      const filter={_id:new ObjectId(id)};
+      const updateDoc={$set:{status:status}};
+      const result=await taskCollection.updateOne(filter,updateDoc);
+      res.send(result);
+    })
 
     
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
