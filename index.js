@@ -54,9 +54,16 @@ async function run() {
 
     })
     app.get('/mytasks',async(req,res)=>{
-      const email=req.query.email;
+      const email=req.query?.email;
+      let status=req.query?.status;
       const query={assignee:email};
-      const result=await taskCollection.find(query).toArray();
+      const options = {
+        
+        sort: { 
+            "due_date": status === 'asc' ? 1 : -1
+        }
+      }
+      const result=await taskCollection.find(query,options).toArray();
       res.send(result);
     })
     app.get('/taskdetails/:id',async(req,res)=>{
