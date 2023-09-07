@@ -1,0 +1,30 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "index.js",
+      "use": "@vercel/node"
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/userrole(.*)",
+      "destination": "/userrole$1"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.js"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/userrole(.*)",
+      "headers": [
+        {
+          "key": "Content-Security-Policy",
+          "value": "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; img-src 'self' data:;"
+        }
+      ]
+    }
+  ]
+}
